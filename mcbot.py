@@ -6,11 +6,12 @@ time.sleep(5)
 
 # Settings
 CHAT_TP_CLICK_POS = (1074, 1233)  # coordinate to click after locate biome command
-WAIT_AFTER_LOCATE = 5             # wait for /locate command to run
+WAIT_AFTER_LOCATE = 3             # wait for /locate command to run
 WAIT_AFTER_TP = 5                 # chunk load time
 WAIT_FALL = 5                     # wait time for the fall
 WAIT_AFTER_Y_MOVE = 3             # /tp ~ ~100 ~
 LOOP_MAX_ITERATION = 500          # 
+SS_HEIGHT = 10
 
 BASE_DIR = "data"
 
@@ -43,7 +44,7 @@ def go_to_biome(biome: str):
 
     time.sleep(WAIT_AFTER_TP)
 
-# Take position for screenshot, 60 blocks higher than ground height
+# Take position for screenshot, SS_HEIGHT blocks higher than ground height
 def position_for_screenshot():
     
     # 1) Get yourself 100 blocks high
@@ -57,8 +58,8 @@ def position_for_screenshot():
     press_double_space()
     time.sleep(0.5)
 
-    # 4) Get yourself 60 blocks up
-    run_command("/tp ~ ~60 ~", wait_after=WAIT_AFTER_Y_MOVE)
+    # 4) Get yourself SS_HEIGHT blocks up
+    run_command(f"/tp ~ ~{SS_HEIGHT} ~", wait_after=WAIT_AFTER_Y_MOVE)
 
 # Save screenshot as data/<biome>/<cycle_index>.png
 def take_screenshot(biome: str, cycle_index: int):
