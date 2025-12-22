@@ -94,7 +94,7 @@ def center_in_biome(biome: str, step: int = 24):
         if at_center:
             return True
         command = f"/tp ~{dx} ~ ~{dz}"
-        run_command(command, wait_after=WAIT_AFTER_TP)
+        run_command(command, wait_after=0.5)
 
 # ================= CORE LOGIC =================
 
