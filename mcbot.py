@@ -2,7 +2,7 @@ import time
 import os
 import pyautogui
 
-time.sleep(5)
+
 
 # ================= SETTINGS =================
 
@@ -26,7 +26,7 @@ def press_double_space():
         pyautogui.keyUp('space')
         time.sleep(0.01)
 
-def run_command(cmd: str, interval: float = 0.02, wait_after: float = 0.5):
+def run_command(cmd: str, interval: float = 0.005, wait_after: float = 0.5):
     pyautogui.press('t')
     pyautogui.write(cmd, interval=interval)
     pyautogui.press('enter')
@@ -169,5 +169,5 @@ def main():
             break
 
 if __name__ == "__main__":
-    time.sleep(5)
+    time.sleep(3)
     main()
