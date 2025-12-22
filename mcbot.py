@@ -53,8 +53,9 @@ def biome_check_direction(biome: str, dx: int, dz: int, tag: str):
 
 # ================= BIOME CENTER =================
 
-def center_in_biome(biome: str, step: int = 32):
-    for i in range(1,6):
+def center_in_biome(biome: str, step: int = 20):
+    temp = []
+    for i in range(1,5):
         north = biome_check_direction(biome, 0, -step, "N")
         south = biome_check_direction(biome, 0, step, "S")
         east  = biome_check_direction(biome, step, 0, "E")
@@ -87,7 +88,11 @@ def center_in_biome(biome: str, step: int = 32):
             return False
         if at_center:
             return True
-        run_command(f"/tp ~{dx} ~ ~{dz}", wait_after=WAIT_AFTER_TP)
+        command = f"/tp ~{dx} ~ ~{dz}"
+        if command in temp:
+            return False
+        temp.append(command)
+        run_command(command, wait_after=WAIT_AFTER_TP)
 
 # ================= CORE LOGIC =================
 
