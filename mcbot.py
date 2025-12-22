@@ -7,12 +7,12 @@ import pyautogui
 # ================= SETTINGS =================
 
 CHAT_TP_CLICK_POS = (745, 870)
-WAIT_AFTER_LOCATE = 3
+WAIT_AFTER_LOCATE = 7
 WAIT_AFTER_TP = 5
-WAIT_FALL = 5
-WAIT_AFTER_Y_MOVE = 3
-LOOP_MAX_ITERATION = 500
-SS_HEIGHT = 10
+WAIT_FALL = 8
+WAIT_AFTER_Y_MOVE = 2
+LOOP_MAX_ITERATION = 500000
+SS_HEIGHT = 15
 
 BASE_DIR = "data"
 LOG_FILE = os.path.expanduser("/home/unre/.minecraft/logs/latest.log")
@@ -26,7 +26,7 @@ def press_double_space():
         pyautogui.keyUp('space')
         time.sleep(0.01)
 
-def run_command(cmd: str, interval: float = 0.005, wait_after: float = 0.5):
+def run_command(cmd: str, interval: float = 0.001, wait_after: float = 0.5):
     pyautogui.press('t')
     pyautogui.write(cmd, interval=interval)
     pyautogui.press('enter')
@@ -47,15 +47,19 @@ def biome_check_direction(biome: str, dx: int, dz: int, tag: str):
     keyword = f"BIOME_{tag}_TRUE"
     run_command(
         f"/execute if biome ~{dx} ~ ~{dz} minecraft:{biome} run say {keyword}",
-        wait_after=0.1
+        wait_after=0.15
     )
     return check_log_for(keyword)
 
 # ================= BIOME CENTER =================
 
-def center_in_biome(biome: str, step: int = 20):
-    temp = []
-    for i in range(1,5):
+def center_in_biome(biome: str, step: int = 24):
+    went_to_east = False
+    went_to_west = False
+    went_to_north = False
+    went_to_south = False
+    at_center = False
+    for i in range(1,8):
         north = biome_check_direction(biome, 0, -step, "N")
         south = biome_check_direction(biome, 0, step, "S")
         east  = biome_check_direction(biome, step, 0, "E")
@@ -63,35 +67,33 @@ def center_in_biome(biome: str, step: int = 20):
 
         dx = dz = 0
         at_least_one_true = False
-        at_center = True
-        if east:
+        
+        if east and not went_to_west:
             dx += step
             at_least_one_true = True
-        else:
-            at_center = False
-        if west:
+            went_to_east = True
+
+        if west and not went_to_east:
             dx -= step
             at_least_one_true = True
-        else:
-            at_center = False
-        if south:
+            went_to_west = True
+
+        if south and not went_to_north:
             dz += step
             at_least_one_true = True
-        else:
-            at_center = False
-        if north:
+            went_to_south = True
+
+        if north and not went_to_south:
             dz -= step
             at_least_one_true = True
-        else:
-            at_center = False
+            went_to_north = True
+
         if not at_least_one_true:
             return False
+        at_center = east and west and south and north
         if at_center:
             return True
         command = f"/tp ~{dx} ~ ~{dz}"
-        if command in temp:
-            return False
-        temp.append(command)
         run_command(command, wait_after=WAIT_AFTER_TP)
 
 # ================= CORE LOGIC =================
