@@ -1,5 +1,4 @@
 badlands
-beach
 birch_forest
 cherry_grove
 dark_forest
